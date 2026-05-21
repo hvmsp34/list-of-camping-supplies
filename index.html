@@ -51,20 +51,6 @@
       </header>
       <div class="grid" id="aptechkaGrid"></div>
       <!-- Форма добавления предмета -->
-      <div data-category="aptechka">
-        <div>
-          <button>🎒</button>
-          <div class="hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
-
     </div>
 
     <!-- БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ -->
@@ -75,20 +61,6 @@
         <span id="bytCount"></span>
       </header>
       <div class="grid" id="bytGrid"></div>
-      <div data-category="byt">
-        <div>
-          <button>🎒</button>
-          <div class="hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
-
     </div>
 
     <!-- ОДЕЖДА -->
@@ -99,20 +71,30 @@
         <span id="odezhdaCount"></span>
       </header>
       <div class="grid" id="odezhdaGrid"></div>
-      <div data-category="odezhda">
-        <div>
-          <button>🎒</button>
-          <div class="hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
+    </div>
 
+    <!-- ДОПОЛНИТЕЛЬНО -->
+    <div class="category">
+      <header>
+        <span>?</span>
+        <h2 data-i18n="catAdditionally">ДОПОЛНИТЕЛЬНО</h2>
+        <span id="additionallyCount"></span>
+      </header>
+      <div class="grid" id="additionallyGrid"></div>
+    </div>
+
+    <div data-category="additionally">
+      <div>
+        <button class="trigger-btn">🎒</button>
+        <div class="palette hidden">
+          <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
+          <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
+          <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
+          <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
+        </div>
+      </div>
+      <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
+      <button class="add-btn" data-i18n="addItemBtn">➕</button>
     </div>
 
     <div class="packed">
@@ -125,10 +107,10 @@
     </div>
 
     <footer data-i18n="footer"></footer>
-    </section>
-    <canvas id="confettiCanvas"
-      style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
-    </canvas>
+  </main>
+  <canvas id="confettiCanvas"
+    style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
+  </canvas>
 </body>
 
 </html>

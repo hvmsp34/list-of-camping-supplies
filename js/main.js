@@ -18,12 +18,11 @@ function deleteCustomItem(id) {
 }
 
 function renderGrids() {
-  const packedContainer = document.getElementById('packedContainer');
   const packedFragment = document.createDocumentFragment();
   let packedCounter = 0, totalVisibleCount = 0, totalItemsCount = 0;
 
   Object.entries(CATEGORIES).forEach(([catKey, category]) => {
-    const container = document.getElementById(category.containerId);
+    const container = category.containerId;
     if (!container) return;
 
     const mainFragment = document.createDocumentFragment();
@@ -62,22 +61,18 @@ function renderGrids() {
     }
   });
 
-  if (packedContainer) packedContainer.replaceChildren(packedFragment);
-
-  const packedCountEl = document.getElementById('packedCount');
-  if (packedCountEl) packedCountEl.textContent = packedCounter;
+  packedContainer.replaceChildren(packedFragment);
+  packedCount.textContent = packedCounter;
 
   // Обновление прогресс-бара и баннера успеха
   updateProgressAndBanners(packedCounter, totalItemsCount, totalVisibleCount);
 }
 
 function updateProgressAndBanners(packedCounter, totalItemsCount, totalVisibleCount) {
-  const progressPercent = totalItemsCount > 0 ? Math.round((packedCounter / totalItemsCount) * 100) : 0;
+  const progressPercentText = totalItemsCount > 0 ? Math.round((packedCounter / totalItemsCount) * 100) : 0;
 
-  const progressBar = document.getElementById('progressBar');
-  const progressPercentText = document.getElementById('progressPercent');
-  if (progressBar) progressBar.style.width = `${progressPercent}%`;
-  if (progressPercentText) progressPercentText.textContent = `${progressPercent}%`;
+  progressBar.style.width = progressPercentText + '%';
+  progressPercent.textContent = progressPercentText + '%';
 
   const successBanner = document.getElementById('successMessage');
   if (successBanner) {
@@ -93,7 +88,7 @@ function updateProgressAndBanners(packedCounter, totalItemsCount, totalVisibleCo
   }
 
   // Обновление текста кнопки
-  const isHidden = document.getElementById('packedContainer')?.classList.contains('hidden');
+  const isHidden = packedContainer?.classList.contains('hidden');
   const toggleTextEl = document.getElementById('togglePackedText');
   if (toggleTextEl && state.translations) {
     toggleTextEl.textContent = state.translations[isHidden ? 'showPacked' : 'hidePacked'] || '';
@@ -147,29 +142,29 @@ function initEvents() {
   });
 
   // 3. Формы добавления предметов и палитры эмодзи
-  document.querySelectorAll('.add-item-form').forEach(form => {
+  document.querySelectorAll('[data-category]').forEach(form => {
     const input = form.querySelector('input');
     const button = form.querySelector('.add-btn');
-    const triggerBtn = form.querySelector('.emoji-trigger-btn');
-    const palette = form.querySelector('.emoji-palette');
+    const triggerBtn = form.querySelector('.trigger-btn');
+    const palette = form.querySelector('.palette');
     const categoryKey = form.dataset.category;
     let selectedEmoji = '🎒';
 
-    triggerBtn?.addEventListener('click', (e) => {
+    triggerBtn.onclick = e => {
       e.stopPropagation();
       palette.classList.toggle('hidden');
-    });
+    };
 
-    palette?.addEventListener('click', (e) => {
+    palette.onclick = e => {
       const span = e.target.closest('span');
       if (!span) return;
       selectedEmoji = span.textContent;
       if (triggerBtn) triggerBtn.textContent = selectedEmoji;
       palette.classList.add('hidden');
       playSound('click');
-    });
+    };
 
-    const handleAdd = () => {
+    function handleAdd() {
       const val = input.value.trim();
       if (!val) return;
 
@@ -184,25 +179,22 @@ function initEvents() {
       renderGrids();
     };
 
-    button?.addEventListener('click', handleAdd);
-    input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAdd(); });
+    button.onclick = handleAdd;
+    input.onkeydown = e => { e.key === 'Enter' ?? handleAdd(); };
   });
 
-  document.addEventListener('click', () => {
-    document.querySelectorAll('.emoji-palette').forEach(p => p.classList.add('hidden'));
-  });
+  document.onclick = () => {
+    document.querySelectorAll('.palette').forEach(p => p.classList.add('hidden'));
+  };
 
   // 4. Управление отображением корзины
-  const toggleBtn = document.getElementById('togglePackedBtn');
-  const packedContainer = document.getElementById('packedContainer');
-  toggleBtn?.addEventListener('click', () => {
-    if (!packedContainer) return;
+  togglePackedBtn.onclick = () => {
     packedContainer.classList.toggle('hidden');
     updateProgressAndBanners(state.packedItems.length, 0, 0); // Обновит текст кнопки
-  });
+  };
 
   // 5. Кнопка сброса
-  document.getElementById('resetBtn')?.addEventListener('click', () => {
+  resetBtn.onclick = () => {
     if (state.packedItems.length === 0 && Object.values(state.customItems).flat().length === 0) return;
     if (!confirm(state.translations?.confirmReset || 'Сбросить?')) return;
 
@@ -210,7 +202,7 @@ function initEvents() {
     resetState();
     packedContainer?.classList.add('hidden');
     renderGrids();
-  });
+  };
 }
 
 async function init() {
@@ -221,9 +213,7 @@ async function init() {
   initTheme(() => playSound('click'));
   initEvents();
 
-  if (state.packedItems.length > 0) {
-    document.getElementById('packedContainer')?.classList.remove('hidden');
-  }
+  if (state.packedItems.length > 0) packedContainer?.classList.remove('hidden');
 
   await renderUI(startLang);
 }

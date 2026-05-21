@@ -436,7 +436,7 @@ main>header {
     font-size: 0.95rem;
   }
 
-  button {
+  .add-btn {
     padding: 8px 16px;
     background: #319795;
     color: white;
@@ -450,49 +450,49 @@ main>header {
     }
   }
 
-}
+  &>div {
+    position: relative;
+    display: inline-block;
 
-.emoji-picker-container {
-  position: relative;
-  display: inline-block;
-
-  button {
-    padding: 8px;
-    font-size: 1.2rem;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  div {
-    position: absolute;
-    bottom: 45px;
-    left: 0;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    padding: 8px;
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 100;
-    width: 160px;
-
-    span {
+    button {
+      padding: 8px;
       font-size: 1.2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
       cursor: pointer;
-      text-align: center;
-      padding: 3px;
-      border-radius: 4px;
-      transition: background 0.1s;
+    }
 
-      &:hover {
-        background: var(--panel-bg);
+    div {
+      position: absolute;
+      bottom: 45px;
+      left: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 8px;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      width: 160px;
+
+      span {
+        font-size: 1.2rem;
+        cursor: pointer;
+        text-align: center;
+        padding: 3px;
+        border-radius: 4px;
+        transition: background 0.1s;
+
+        &:hover {
+          background: var(--panel-bg);
+        }
       }
     }
   }
+
 }
 
 footer {

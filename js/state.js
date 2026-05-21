@@ -6,7 +6,7 @@ export const state = {
   currentLang: 'ru',
   translations: null,
   packedItems: JSON.parse(localStorage.getItem('packedCampingItems')) || [],
-  customItems: JSON.parse(localStorage.getItem('customCampingItems')) || { aptechka: [], byt: [], odezhda: [] }
+  customItems: JSON.parse(localStorage.getItem('customCampingItems')) || { additionally: [] }
 };
 
 export async function loadTranslations(lang) {
