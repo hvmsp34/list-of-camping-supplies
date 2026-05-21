@@ -10,9 +10,9 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="top-bar">
-      <div class="lang-bar" id="langControls">
+  <main>
+    <header>
+      <div id="langControls">
         <button data-lang="ru">🇷🇺 RU</button>
         <button data-lang="en">🇬🇧 EN</button>
         <button data-lang="de">🇩🇪 DE</button>
@@ -20,20 +20,20 @@
         <button data-lang="fr">🇫🇷 FR</button>
       </div>
       <!-- Кнопка переключения темной темы -->
-      <button id="themeToggleBtn" class="theme-toggle-btn">🌙</button>
-    </div>
+      <button id="themeToggleBtn">🌙</button>
+    </header>
 
     <div class="hero">
       <h1 data-i18n="mainTitle"></h1>
     </div>
 
-    <div class="progress-section">
-      <div class="progress-info">
+    <div class="progress">
+      <div class="info">
         <span data-i18n="totalProgress">Общий прогресс сборов</span>
         <span id="progressPercent">0%</span>
       </div>
-      <div class="progress-bar-wrapper">
-        <div id="progressBar" class="progress-bar"></div>
+      <div class="bar">
+        <div id="progressBar"></div>
       </div>
     </div>
 
@@ -44,90 +44,73 @@
 
     <!-- АПТЕЧКА -->
     <div class="category">
-      <div class="category-header">
+      <header>
         <span>💊</span>
         <h2 data-i18n="catAptechka">АПТЕЧКА</h2>
         <span id="aptechkaCount"></span>
-      </div>
+      </header>
       <div class="grid" id="aptechkaGrid"></div>
       <!-- Форма добавления предмета -->
-      <div class="add-item-form" data-category="aptechka">
-        <div class="emoji-picker-container">
-          <button class="emoji-trigger-btn">🎒</button>
-          <div class="emoji-palette hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
-
     </div>
 
     <!-- БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ -->
     <div class="category">
-      <div class="category-header">
+      <header>
         <span>🏠</span>
         <h2 data-i18n="catByt">БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ</h2>
         <span id="bytCount"></span>
-      </div>
+      </header>
       <div class="grid" id="bytGrid"></div>
-      <div class="add-item-form" data-category="aptechka">
-        <div class="emoji-picker-container">
-          <button class="emoji-trigger-btn">🎒</button>
-          <div class="emoji-palette hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
-
     </div>
 
     <!-- ОДЕЖДА -->
     <div class="category">
-      <div class="category-header">
+      <header>
         <span>👕</span>
         <h2 data-i18n="catOdezhda">ОДЕЖДА</h2>
         <span id="odezhdaCount"></span>
-      </div>
+      </header>
       <div class="grid" id="odezhdaGrid"></div>
-      <div class="add-item-form" data-category="aptechka">
-        <div class="emoji-picker-container">
-          <button class="emoji-trigger-btn">🎒</button>
-          <div class="emoji-palette hidden">
-            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
-            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
-            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
-            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
-          </div>
-        </div>
-        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
-        <button class="add-btn" data-i18n="addItemBtn">➕</button>
-      </div>
-
     </div>
 
-    <div class="packed-section">
-      <button id="togglePackedBtn" class="packed-toggle-btn">
+    <!-- ДОПОЛНИТЕЛЬНО -->
+    <div class="category">
+      <header>
+        <span>?</span>
+        <h2 data-i18n="catAdditionally">ДОПОЛНИТЕЛЬНО</h2>
+        <span id="additionallyCount"></span>
+      </header>
+      <div class="grid" id="additionallyGrid"></div>
+    </div>
+
+    <div data-category="additionally">
+      <div>
+        <button class="trigger-btn">🎒</button>
+        <div class="palette hidden">
+          <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
+          <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
+          <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
+          <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
+        </div>
+      </div>
+      <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
+      <button class="add-btn" data-i18n="addItemBtn">➕</button>
+    </div>
+
+    <div class="packed">
+      <button id="togglePackedBtn">
         <span id="togglePackedText" data-i18n="showPacked">Показать собранные вещи</span>
         (<span id="packedCount">0</span>)
       </button>
-      <button id="resetBtn" class="reset-btn" data-i18n="resetBtn">Сбросить прогресс</button>
-      <div id="packedContainer" class="grid packed-grid hidden"></div>
+      <button id="resetBtn" data-i18n="resetBtn">Сбросить прогресс</button>
+      <div id="packedContainer" class="grid hidden"></div>
     </div>
 
-    <div class="footer" data-i18n="footer"></div>
-  </div>
+    <footer data-i18n="footer"></footer>
+  </main>
   <canvas id="confettiCanvas"
-    style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;"></canvas>
+    style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
+  </canvas>
 </body>
 
 </html>
