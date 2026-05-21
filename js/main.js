@@ -11,24 +11,66 @@ const SUPPORTED_LANGS = ['ru', 'en', 'de', 'es', 'fr'];
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playSound(type) {
   if (audioCtx.state === 'suspended') audioCtx.resume();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain); gain.connect(audioCtx.destination);
+
   if (type === 'click') {
-    osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    const bufferSize = audioCtx.sampleRate * 0.02; // Очень короткий звук (20 миллисекунд)
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Генерируем белый шум для имитации щелчка пластиковых контактов кнопки
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = buffer;
+
+    // Создаем фильтр, чтобы убрать лишний гул и оставить только чистый «цокающий» верхний звук
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+
+    const gainNode = audioCtx.createGain();
+    // Мгновенное затухание шума за 8-10 миллисекунд
+    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.01);
+
+    noiseNode.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    // Дополнительный низкий щелчок (имитация резонанса пластикового корпуса мыши)
+    const osc = audioCtx.createOscillator();
+    const oscGain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+
+    oscGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.015);
+
+    osc.connect(oscGain);
+    oscGain.connect(audioCtx.destination);
+
+    // Запускаем оба источника одновременно
+    noiseNode.start();
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.02);
   } else if (type === 'fanfare') {
-    [523.25, 659.25, 783.99].forEach((freq, i) => {
+    // Код фанфар оставляем без изменений
+    const notes = [523.25, 659.25, 783.99];
+    notes.forEach((freq, index) => {
       const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
       o.connect(g); g.connect(audioCtx.destination); o.type = 'triangle';
-      const start = audioCtx.currentTime + i * 0.12; o.frequency.setValueAtTime(freq, start);
-      g.gain.setValueAtTime(0, audioCtx.currentTime); g.gain.setValueAtTime(0.15, start);
-      g.gain.exponentialRampToValueAtTime(0.01, start + 0.4); o.start(start); o.stop(start + 0.4);
+      const startTime = audioCtx.currentTime + index * 0.12;
+      o.frequency.setValueAtTime(freq, startTime);
+      g.gain.setValueAtTime(0, audioCtx.currentTime);
+      g.gain.setValueAtTime(0.15, startTime);
+      g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+      o.start(startTime); o.stop(startTime + 0.4);
     });
   }
 }
+
 
 // ========== СИСТЕМА КОНФЕТТИ ==========
 function startConfetti() {
@@ -88,57 +130,134 @@ async function loadTranslations(lang) {
   }
 }
 
-function createCardElement(id, emoji, name, index) {
-  const card = document.createElement('div'); card.className = 'item-card'; card.dataset.itemId = id;
-  const emojiEl = document.createElement('div'); emojiEl.className = 'item-emoji'; emojiEl.textContent = emoji;
-  const nameEl = document.createElement('div'); nameEl.className = 'item-name'; nameEl.textContent = name;
-  const numEl = document.createElement('div'); numEl.className = 'item-number'; numEl.textContent = index + 1;
-  card.append(emojiEl, nameEl, numEl); return card;
+// 1. ИСПРАВЛЕННАЯ ФУНКЦИЯ СОЗДАНИЯ КАРТОЧКИ
+function createCardElement(id, emoji, name, index, isCustom = false) {
+  const card = document.createElement('div');
+  card.className = 'item-card';
+  card.dataset.itemId = id;
+
+  const emojiEl = document.createElement('div');
+  emojiEl.className = 'item-emoji';
+  emojiEl.textContent = emoji;
+
+  const nameEl = document.createElement('div');
+  nameEl.className = 'item-name';
+  nameEl.textContent = name;
+
+  const numEl = document.createElement('div');
+  numEl.className = 'item-number';
+  numEl.textContent = index + 1;
+
+  card.append(emojiEl, nameEl, numEl);
+
+  // Добавляем крестик удаления СТРОГО только если предмет кастомный
+  if (isCustom) {
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.textContent = '❌';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteCustomItem(id);
+    });
+    card.appendChild(deleteBtn);
+  }
+
+  return card;
 }
 
+// 2. ИСПРАВЛЕННАЯ ФУНКЦИЯ ОТРИСОВКИ СЕТОК
 function renderGrids(translations) {
   const packedContainer = document.getElementById('packedContainer');
   const packedFragment = document.createDocumentFragment();
-  let packedCounter = 0; let totalVisibleCount = 0; let totalItemsCount = 0;
+  let packedCounter = 0;
+  let totalVisibleCount = 0;
+  let totalItemsCount = 0;
 
   Object.entries(CATEGORIES).forEach(([catKey, category]) => {
-    const container = document.getElementById(category.containerId); if (!container) return;
-    const mainFragment = document.createDocumentFragment(); let visibleCount = 0;
+    const container = document.getElementById(category.containerId);
+    if (!container) return;
 
-    // Объединяем встроенные предметы с созданными пользователем
-    const allItems = [...category.items, ...(customItems[catKey] || [])];
+    const mainFragment = document.createDocumentFragment();
+    let visibleCount = 0;
 
-    allItems.forEach(({ id, emoji }, idx) => {
+    // Рендерим СТАНДАРТНЫЕ предметы
+    if (category.items && Array.isArray(category.items)) {
+      category.items.forEach(({ id, emoji }, idx) => {
+        totalItemsCount++;
+        // Безопасное получение перевода
+        const name = (translations && translations.items && translations.items[id]) ? translations.items[id] : id;
+        const isPacked = packedItems.includes(id);
+        const card = createCardElement(id, emoji, name, idx, false);
+
+        if (isPacked) {
+          packedFragment.appendChild(card);
+          packedCounter++;
+        } else {
+          mainFragment.appendChild(card);
+          visibleCount++;
+          totalVisibleCount++;
+        }
+      });
+    }
+
+    // Рендерим КАСТОМНЫЕ предметы
+    const currentCustom = customItems[catKey] || [];
+    currentCustom.forEach(({ id, emoji }, idx) => {
       totalItemsCount++;
-      // Если у предмета нет перевода (потому что его ввели вручную), выводим его исходный id в качестве имени
-      const name = translations.items?.[id] || id;
+      const name = id; // Для кастомных имя совпадает с ID
       const isPacked = packedItems.includes(id);
-      const card = createCardElement(id, emoji, name, idx);
+      // Индекс карточки идет встык после дефолтных предметов
+      const globalIdx = (category.items ? category.items.length : 0) + idx;
+      const card = createCardElement(id, emoji, name, globalIdx, true);
 
-      if (isPacked) { packedFragment.appendChild(card); packedCounter++; }
-      else { mainFragment.appendChild(card); visibleCount++; totalVisibleCount++; }
+      if (isPacked) {
+        packedFragment.appendChild(card);
+        packedCounter++;
+      } else {
+        mainFragment.appendChild(card);
+        visibleCount++;
+        totalVisibleCount++;
+      }
     });
 
     container.replaceChildren(mainFragment);
+
     const countEl = document.getElementById(`${catKey}Count`);
-    if (countEl) countEl.textContent = `${visibleCount} ${translations.itemsCount || 'предметов'}`;
+    if (countEl) {
+      const textWord = (translations && translations.itemsCount) ? translations.itemsCount : 'предметов';
+      countEl.textContent = `${visibleCount} ${textWord}`;
+    }
   });
 
   if (packedContainer) packedContainer.replaceChildren(packedFragment);
-  const packedCountEl = document.getElementById('packedCount'); if (packedCountEl) packedCountEl.textContent = packedCounter;
 
+  const packedCountEl = document.getElementById('packedCount');
+  if (packedCountEl) packedCountEl.textContent = packedCounter;
+
+  // Обновление прогресс-бара
   const progressPercent = totalItemsCount > 0 ? Math.round((packedCounter / totalItemsCount) * 100) : 0;
-  const progressBar = document.getElementById('progressBar'); const progressPercentText = document.getElementById('progressPercent');
-  if (progressBar) progressBar.style.width = `${progressPercent}%`; if (progressPercentText) progressPercentText.textContent = `${progressPercent}%`;
+  const progressBar = document.getElementById('progressBar');
+  const progressPercentText = document.getElementById('progressPercent');
+  if (progressBar) progressBar.style.width = `${progressPercent}%`;
+  if (progressPercentText) progressPercentText.textContent = `${progressPercent}%`;
 
+  // Проверка на успех
   const successBanner = document.getElementById('successMessage');
   if (successBanner) {
     if (totalVisibleCount === 0 && packedCounter > 0) {
-      if (successBanner.classList.contains('hidden')) { successBanner.classList.remove('hidden'); playSound('fanfare'); startConfetti(); }
-    } else { successBanner.classList.add('hidden'); }
+      if (successBanner.classList.contains('hidden')) {
+        successBanner.classList.remove('hidden');
+        playSound('fanfare');
+        startConfetti();
+      }
+    } else {
+      successBanner.classList.add('hidden');
+    }
   }
+
   updateToggleButtonText(packedContainer?.classList.contains('hidden'));
 }
+
 
 function updateToggleButtonText(isHidden) {
   const toggleTextEl = document.getElementById('togglePackedText'); if (!toggleTextEl || !globalTranslations) return;
@@ -176,7 +295,23 @@ function updateActiveButton(activeLang) {
   document.querySelectorAll('[data-lang]').forEach(btn => { btn.classList.toggle('active', btn.dataset.lang === activeLang); });
 }
 
-// ========== ИНИЦИАЛИЗАЦИЯ СОБЫТИЙ ==========
+// Удаление кастомного предмета из базы данных
+function deleteCustomItem(id) {
+  playSound('click');
+
+  // Проходим по всем категориям и удаляем предмет с нужным ID
+  Object.keys(customItems).forEach(catKey => {
+    customItems[catKey] = customItems[catKey].filter(item => item.id !== id);
+  });
+
+  // Также убираем его из списка собранных, если он там был
+  packedItems = packedItems.filter(pId => pId !== id);
+
+  localStorage.setItem('customCampingItems', JSON.stringify(customItems));
+  localStorage.setItem('packedCampingItems', JSON.stringify(packedItems));
+  renderGrids(globalTranslations);
+}
+
 function initEvents() {
   document.getElementById('langControls')?.addEventListener('click', async (e) => {
     const btn = e.target.closest('[data-lang]'); if (!btn || btn.dataset.lang === currentLang) return;
@@ -194,27 +329,54 @@ function initEvents() {
     }, 200);
   });
 
-  // Событие добавления пользовательского предмета
+  // Логика форм добавления предметов и палитры эмодзи
   document.querySelectorAll('.add-item-form').forEach(form => {
     const input = form.querySelector('input');
-    const button = form.querySelector('button');
+    const button = form.querySelector('.add-btn');
+    const triggerBtn = form.querySelector('.emoji-trigger-btn');
+    const palette = form.querySelector('.emoji-palette');
     const categoryKey = form.dataset.category;
+    let selectedEmoji = '🎒'; // По умолчанию
+
+    // Открытие палитры
+    triggerBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      palette.classList.toggle('hidden');
+    });
+
+    // Выбор эмодзи из палитры
+    palette?.addEventListener('click', (e) => {
+      const span = e.target.closest('span');
+      if (!span) return;
+      selectedEmoji = span.textContent;
+      if (triggerBtn) triggerBtn.textContent = selectedEmoji;
+      palette.classList.add('hidden');
+      playSound('click');
+    });
 
     const handleAdd = () => {
       const val = input.value.trim();
       if (!val) return;
 
-      // Создаем объект кастомного предмета. В качестве ID используем введенный пользователем текст
-      customItems[categoryKey].push({ id: val, emoji: '🎒' });
+      customItems[categoryKey].push({ id: val, emoji: selectedEmoji });
       localStorage.setItem('customCampingItems', JSON.stringify(customItems));
 
       input.value = '';
+      // Сбрасываем иконку на рюкзак после успешного добавления
+      selectedEmoji = '🎒';
+      if (triggerBtn) triggerBtn.textContent = '🎒';
+
       playSound('click');
       renderGrids(globalTranslations);
     };
 
     button?.addEventListener('click', handleAdd);
     input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAdd(); });
+  });
+
+  // Закрытие палитр при клике в любое другое место экрана
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.emoji-palette').forEach(p => p.classList.add('hidden'));
   });
 
   const toggleBtn = document.getElementById('togglePackedBtn'); const packedContainer = document.getElementById('packedContainer');
@@ -233,7 +395,8 @@ function initEvents() {
 async function init() {
   const saved = localStorage.getItem('preferredLanguage'); const navLang = navigator.language?.substring(0, 2);
   const startLang = SUPPORTED_LANGS.includes(saved) ? saved : (SUPPORTED_LANGS.includes(navLang) ? navLang : 'ru');
-  initTheme(); initEvents();
+  initTheme();
+  initEvents();
   const packedContainer = document.getElementById('packedContainer');
   if (packedContainer && packedItems.length > 0) packedContainer.classList.remove('hidden');
   await renderUI(startLang);

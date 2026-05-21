@@ -468,3 +468,81 @@ body {
 .add-item-form button:hover {
   background: #2c7a7b;
 }
+
+/* Кнопка удаления кастомного предмета */
+.item-card {
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.item-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+  background: #c53030;
+}
+
+/* Выбор эмодзи в форме добавления */
+.emoji-picker-container {
+  position: relative;
+  display: inline-block;
+}
+
+.emoji-trigger-btn {
+  padding: 8px;
+  font-size: 1.2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.emoji-palette {
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  width: 160px;
+}
+
+.emoji-palette span {
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-align: center;
+  padding: 3px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+
+.emoji-palette span:hover {
+  background: var(--panel-bg);
+}
