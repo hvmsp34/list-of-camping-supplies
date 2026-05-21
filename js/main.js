@@ -71,20 +71,16 @@ function renderGrids() {
 function updateProgressAndBanners(packedCounter, totalItemsCount, totalVisibleCount) {
   const progressPercentText = totalItemsCount > 0 ? Math.round((packedCounter / totalItemsCount) * 100) : 0;
 
+  console.log(progressPercentText);
   progressBar.style.width = progressPercentText + '%';
   progressPercent.textContent = progressPercentText + '%';
 
-  const successBanner = document.getElementById('successMessage');
-  if (successBanner) {
-    if (totalVisibleCount === 0 && packedCounter > 0) {
-      if (successBanner.classList.contains('hidden')) {
-        successBanner.classList.remove('hidden');
-        playSound('fanfare');
-        startConfetti();
-      }
-    } else {
-      successBanner.classList.add('hidden');
-    }
+  if (progressPercentText === 100) {
+    successMessage.classList.remove('hidden');
+    playSound('fanfare');
+    startConfetti();
+  } else {
+    successMessage.classList.add('hidden');
   }
 
   // Обновление текста кнопки
