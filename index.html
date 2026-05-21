@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Походная визуализация — Аптечка, Быт, Одежда / Multi-language</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <div class="lang-bar" id="langControls">
+        <button data-lang="ru">🇷🇺 Русский</button>
+        <button data-lang="en">🇬🇧 English</button>
+        <button data-lang="de">🇩🇪 Deutsch</button>
+        <button data-lang="es">🇪🇸 Español</button>
+        <button data-lang="fr">🇫🇷 Français</button>
+      </div>
+    </div>
+    <div class="hero">
+      <h1 id="mainTitle">🏕️ СНАРЯЖЕНИЕ · ВИЗУАЛИЗАЦИЯ</h1>
+      <p id="subTitle">✔️ Аптечка | 🏠 Бытовые принадлежности | 👕 Одежда (с картинками)</p>
+    </div>
+
+    <!-- АПТЕЧКА -->
+    <div class="category">
+      <div class="category-header">
+        <span>💊</span>
+        <h2 id="catAptechka">АПТЕЧКА</h2>
+        <span id="aptechkaCount">10 предметов</span>
+      </div>
+      <div class="grid" id="aptechka-grid"></div>
+    </div>
+
+    <!-- БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ -->
+    <div class="category">
+      <div class="category-header">
+        <span>🏠</span>
+        <h2 id="catByt">БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ</h2>
+        <span id="bytCount">32 предмета</span>
+      </div>
+      <div class="grid" id="byt-grid"></div>
+    </div>
+
+    <!-- ОДЕЖДА -->
+    <div class="category">
+      <div class="category-header">
+        <span>👕</span>
+        <h2 id="catOdezhda">ОДЕЖДА</h2>
+        <span id="odezhdaCount">12 предметов</span>
+      </div>
+      <div class="grid" id="odezhda-grid"></div>
+    </div>
+
+    <div class="footer" id="footerText">
+      📋 визуальный чек-лист для кемпинга, похода или дачи · наведи на карточку ✨
+    </div>
+  </div>
+</body>
+
+</html>
