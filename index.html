@@ -4,61 +4,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Походная визуализация — Аптечка, Быт, Одежда / Multi-language</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="main.js" defer></script>
+  <title>Походная визуализация</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/main.js"></script>
 </head>
 
 <body>
   <div class="container">
     <div class="top-bar">
       <div class="lang-bar" id="langControls">
-        <button data-lang="ru">🇷🇺 Русский</button>
-        <button data-lang="en">🇬🇧 English</button>
-        <button data-lang="de">🇩🇪 Deutsch</button>
-        <button data-lang="es">🇪🇸 Español</button>
-        <button data-lang="fr">🇫🇷 Français</button>
+        <button data-lang="ru">🇷🇺 RU</button>
+        <button data-lang="en">🇬🇧 EN</button>
+        <button data-lang="de">🇩🇪 DE</button>
+        <button data-lang="es">🇪🇸 ES</button>
+        <button data-lang="fr">🇫🇷 FR</button>
+      </div>
+      <!-- Кнопка переключения темной темы -->
+      <button id="themeToggleBtn" class="theme-toggle-btn">🌙</button>
+    </div>
+
+    <div class="hero">
+      <h1 data-i18n="mainTitle"></h1>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-info">
+        <span data-i18n="totalProgress">Общий прогресс сборов</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div id="progressBar" class="progress-bar"></div>
       </div>
     </div>
-    <div class="hero">
-      <h1 id="mainTitle">🏕️ СНАРЯЖЕНИЕ · ВИЗУАЛИЗАЦИЯ</h1>
-      <p id="subTitle">✔️ Аптечка | 🏠 Бытовые принадлежности | 👕 Одежда (с картинками)</p>
+
+    <div id="successMessage" class="success-banner hidden">
+      <h2 data-i18n="allPackedTitle"></h2>
+      <p data-i18n="allPackedSub"></p>
     </div>
 
     <!-- АПТЕЧКА -->
     <div class="category">
       <div class="category-header">
         <span>💊</span>
-        <h2 id="catAptechka">АПТЕЧКА</h2>
-        <span id="aptechkaCount">10 предметов</span>
+        <h2 data-i18n="catAptechka">АПТЕЧКА</h2>
+        <span id="aptechkaCount"></span>
       </div>
-      <div class="grid" id="aptechka-grid"></div>
+      <div class="grid" id="aptechkaGrid"></div>
+      <!-- Форма добавления предмета -->
+      <div class="add-item-form" data-category="aptechka">
+        <div class="emoji-picker-container">
+          <button class="emoji-trigger-btn">🎒</button>
+          <div class="emoji-palette hidden">
+            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
+            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
+            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
+            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
+          </div>
+        </div>
+        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
+        <button class="add-btn" data-i18n="addItemBtn">➕</button>
+      </div>
+
     </div>
 
     <!-- БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ -->
     <div class="category">
       <div class="category-header">
         <span>🏠</span>
-        <h2 id="catByt">БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ</h2>
-        <span id="bytCount">32 предмета</span>
+        <h2 data-i18n="catByt">БЫТОВЫЕ ПРИНАДЛЕЖНОСТИ</h2>
+        <span id="bytCount"></span>
       </div>
-      <div class="grid" id="byt-grid"></div>
+      <div class="grid" id="bytGrid"></div>
+      <div class="add-item-form" data-category="aptechka">
+        <div class="emoji-picker-container">
+          <button class="emoji-trigger-btn">🎒</button>
+          <div class="emoji-palette hidden">
+            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
+            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
+            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
+            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
+          </div>
+        </div>
+        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
+        <button class="add-btn" data-i18n="addItemBtn">➕</button>
+      </div>
+
     </div>
 
     <!-- ОДЕЖДА -->
     <div class="category">
       <div class="category-header">
         <span>👕</span>
-        <h2 id="catOdezhda">ОДЕЖДА</h2>
-        <span id="odezhdaCount">12 предметов</span>
+        <h2 data-i18n="catOdezhda">ОДЕЖДА</h2>
+        <span id="odezhdaCount"></span>
       </div>
-      <div class="grid" id="odezhda-grid"></div>
+      <div class="grid" id="odezhdaGrid"></div>
+      <div class="add-item-form" data-category="aptechka">
+        <div class="emoji-picker-container">
+          <button class="emoji-trigger-btn">🎒</button>
+          <div class="emoji-palette hidden">
+            <span>🎒</span><span>🏕️</span><span>🔥</span><span>🍖</span><span>🎣</span>
+            <span>🎸</span><span>🔦</span><span>🔋</span><span>🧭</span><span>🗺️</span>
+            <span>👕</span><span>👟</span><span>🧢</span><span>🍏</span><span>🥤</span>
+            <span>💊</span><span>🩹</span><span>🧴</span><span>🧸</span><span>📸</span>
+          </div>
+        </div>
+        <input type="text" data-i18n-holder="addItemPlaceholder" placeholder="Добавить свой предмет...">
+        <button class="add-btn" data-i18n="addItemBtn">➕</button>
+      </div>
+
     </div>
 
-    <div class="footer" id="footerText">
-      📋 визуальный чек-лист для кемпинга, похода или дачи · наведи на карточку ✨
+    <div class="packed-section">
+      <button id="togglePackedBtn" class="packed-toggle-btn">
+        <span id="togglePackedText" data-i18n="showPacked">Показать собранные вещи</span>
+        (<span id="packedCount">0</span>)
+      </button>
+      <button id="resetBtn" class="reset-btn" data-i18n="resetBtn">Сбросить прогресс</button>
+      <div id="packedContainer" class="grid packed-grid hidden"></div>
     </div>
+
+    <div class="footer" data-i18n="footer"></div>
   </div>
+  <canvas id="confettiCanvas"
+    style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;"></canvas>
 </body>
 
 </html>
