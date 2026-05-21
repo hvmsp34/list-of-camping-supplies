@@ -1,38 +1,73 @@
-// Единый источник истины для всех предметов
-export const CAMPING_ITEMS = [
-  // Аптечка
-  "Вата", "Бинты", "Лейкопластырь", "Обезболивающее", "Перекись водорода",
-  "Колдрекс", "Жаропонижающее", "Ножницы", "Капли", "Постилки для горла",
-  // Бытовые
-  "Туалетная бумага", "Бумажные полотенца", "Влажные салфетки", "Нож",
-  "Разделочная доска", "Посуда (ложки/вилки/стаканы/тарелки/глубокие тарелки/большие контейнеры)",
-  "Чайник", "Казан", "Губка", "Средство для мытья посуды", "Ведро",
-  "Обычное тряпичное полотенце", "Половник", "Котелок", "Средство от насекомых и клещей",
-  "Крем от загара", "Решётка", "Походный мангал", "Бензопила", "Колонка",
-  "Генератор", "Инструмент", "Палатки", "Спальники", "Коврик-пенка", "Шатёр",
-  "Топор", "Шампура", "Доски для лавочки или походные стулья", "Пледы/одеяла",
-  "Зубная паста + щетка", "Тент",
-  // Одежда
-  "Головной убор (кепка/панама/шапка/бандана)", "Тёплый костюм",
-  "Удобная обувь (кроссовки/сандали-тапочки)", "Шорты", "Купальник/купальные трусы",
-  "Нижнее белье", "Полотенце", "Рубашки с длинным рукавом (чтобы не обгореть)",
-  "Тонкие, лёгкие брюки (см. пункт выше👆)", "Футболки/топики", "Носки (тонкие/теплые)", "Дождевик"
-];
+// js/categories.js
 
 export const CATEGORIES = {
   aptechka: {
-    name: 'aptechka',
-    containerId: 'aptechka-grid',
-    itemIndices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // Индексы в CAMPING_ITEMS
+    containerId: 'aptechkaGrid',
+    items: [
+      { id: 'vata', emoji: '🧻' },
+      { id: 'bint', emoji: '🩹' },
+      { id: 'plastyr', emoji: '🩹' },
+      { id: 'obezbol', emoji: '💊' },
+      { id: 'perekis', emoji: '🧴' },
+      { id: 'coldrex', emoji: '🍵' },
+      { id: 'zharopon', emoji: '🌡️' },
+      { id: 'nozhnicy', emoji: '✂️' },
+      { id: 'kapli', emoji: '👁️💧' },
+      { id: 'pastilki', emoji: '🍬' }
+    ]
   },
   byt: {
-    name: 'byt',
-    containerId: 'byt-grid',
-    itemIndices: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+    containerId: 'bytGrid',
+    items: [
+      { id: 'tualet_bumaga', emoji: '🧻' },
+      { id: 'bum_polotenca', emoji: '🧻📄' },
+      { id: 'vlazh_salfetki', emoji: '🧼' },
+      { id: 'nozh', emoji: '🔪' },
+      { id: 'doska', emoji: '🪵' },
+      { id: 'posuda', emoji: '🍽️🥣' },
+      { id: 'chajnik', emoji: '🫖' },
+      { id: 'kazan', emoji: '🍲' },
+      { id: 'gubka', emoji: '🧽' },
+      { id: 'moyushee', emoji: '🧴🧼' },
+      { id: 'vedro', emoji: '🪣' },
+      { id: 'polotence_byt', emoji: '🧣' },
+      { id: 'polovnik', emoji: '🥄' },
+      { id: 'kotelok', emoji: '🥘' },
+      { id: 'ot_nasekomyh', emoji: '🦟🚫' },
+      { id: 'krem_zagar', emoji: '🧴☀️' },
+      { id: 'reshetka', emoji: '🥩🔥' },
+      { id: 'mangal', emoji: '🍖🔥' },
+      { id: 'benzopila', emoji: '⛓️🪵' },
+      { id: 'kolonka', emoji: '🔊🎵' },
+      { id: 'generator', emoji: '⚡🔌' },
+      { id: 'instrument', emoji: '🔧🛠️' },
+      { id: 'palatki', emoji: '⛺' },
+      { id: 'spalniki', emoji: '🛌' },
+      { id: 'penka', emoji: '🧩' },
+      { id: 'shater', emoji: '🏕️' },
+      { id: 'topor', emoji: '🪓' },
+      { id: 'shampura', emoji: '🍢' },
+      { id: 'stulya', emoji: '🪑' },
+      { id: 'pledy', emoji: '🛏️🧣' },
+      { id: 'pasta_shetka', emoji: '🪥' },
+      { id: 'tent', emoji: '🔲⛺' }
+    ]
   },
   odezhda: {
-    name: 'odezhda',
-    containerId: 'odezhda-grid',
-    itemIndices: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    containerId: 'odezhdaGrid',
+    items: [
+      { id: 'golova', emoji: '🧢' },
+      { id: 'kostyum', emoji: '🧥' },
+      { id: 'obuv', emoji: '👟' },
+      { id: 'shorty', emoji: '🩳' },
+      { id: 'kupalnik', emoji: '🩱' },
+      { id: 'bele', emoji: '🩲' },
+      { id: 'polotence_odezhda', emoji: '🏖️🧺' },
+      { id: 'rubashki', emoji: '👕🌞' },
+      { id: 'bruki', emoji: '👖🌬️' },
+      { id: 'futbolki', emoji: '👚' },
+      { id: 'noski', emoji: '🧦' },
+      { id: 'dozhdevik', emoji: '🧥☔' }
+    ]
   }
 };
