@@ -85,10 +85,7 @@ function updateProgressAndBanners(packedCounter, totalItemsCount, totalVisibleCo
 
   // Обновление текста кнопки
   const isHidden = packedContainer?.classList.contains('hidden');
-  const toggleTextEl = document.getElementById('togglePackedText');
-  if (toggleTextEl && state.translations) {
-    toggleTextEl.textContent = state.translations[isHidden ? 'showPacked' : 'hidePacked'] || '';
-  }
+  if (state.translations) togglePackedText.textContent = state.translations[isHidden ? 'showPacked' : 'hidePacked'] || '';
 }
 
 async function renderUI(lang) {
@@ -107,13 +104,13 @@ async function renderUI(lang) {
 
 function initEvents() {
   // 1. Переключение языков
-  document.getElementById('langControls')?.addEventListener('click', async (e) => {
+  langControls.onclick = async e => {
     const btn = e.target.closest('[data-lang]');
     if (!btn || btn.dataset.lang === state.currentLang) return;
     document.body.style.opacity = '0.5';
     await renderUI(btn.dataset.lang);
     document.body.style.opacity = '1';
-  });
+  };
 
   // 2. Клик по карточке (сбор/возврат предмета)
   document.body.addEventListener('click', (e) => {
@@ -186,7 +183,7 @@ function initEvents() {
   // 4. Управление отображением корзины
   togglePackedBtn.onclick = () => {
     packedContainer.classList.toggle('hidden');
-    updateProgressAndBanners(state.packedItems.length, 0, 0); // Обновит текст кнопки
+    renderGrids();
   };
 
   // 5. Кнопка сброса

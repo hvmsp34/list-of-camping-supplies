@@ -1,7 +1,7 @@
 // js/confetti.js
 
 export function startConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
+  const canvas = confettiCanvas;
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
